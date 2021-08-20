@@ -1,34 +1,43 @@
 #include<bits/stdc++.h>
 using namespace std;
-int nodes, vertices;
-vector<int>parent(nodes+1);
 
-void makeSet(int u){
-    parent[u] = u;
-}
+class dsu{
+public:
+    vector<int>parent, size;
+    dsu(int n){
+        size.resize(n+1, 1);
+        parent.resize(n+1);
+        for(int i = 1; i<=n; i++)
+            parent[i] = i;
+    }
 
-int findRepresentative(int u){
-    if(u==parent[u])    return u;
-    else return findRepresentative(parent[u]);
-}
+    int findRepresentative(int u){
+        if(u == parent[u])  return u;
+        else return parent[u] = findRepresentative( parent[u] );
+    }
 
-void unionSet(int a, int b){
-     a = findRepresentative(a);
-     b = findRepresentative(b);
+    void makeSet(int a, int b){
+        a = findRepresentative(a);
+        b = findRepresentative(b);
 
-     if(a!=b)   parent[b] = a;
-}
+        if(a != b){
+            if(size[b] > size[a])   swap(a, b);
+
+            parent[b] = a;
+            size[a] += size[b];
+        }
+    }
+};
 
 int main(void){
-    cin>>nodes>>vertices;
+    int nodes, vertices;
+    cin>>nodes;
 
-    for(int i = 1; i<=nodes; i++)
-        makeSet(i);
-    
+    dsu d1(nodes);
     for(int i = 0; i<vertices; i++){
         int a, b;
-        cin>>a>>b;
-        unionSet(a, b);
+        cin>>a >>b;
+        d1.makeSet(a, b);
     }
 
     return 0;
