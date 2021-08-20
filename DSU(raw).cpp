@@ -12,11 +12,12 @@ public:
     }
 
     int findRepresentative(int u){
-        if(u == parent[u])  return u;
-        else return parent[u] = findRepresentative( parent[u] );
+        if(u != parent[u])  parent[u] = findRepresentative( parent[u] );
+
+        return u;
     }
 
-    void makeSet(int a, int b){
+    void unionSet(int a, int b){
         a = findRepresentative(a);
         b = findRepresentative(b);
 
